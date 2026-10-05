@@ -5,12 +5,30 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class SupabaseService {
   SupabaseService._();
 
-  static const String _defaultUrl = 'https://fqpywbugsvjofozmkwvv.supabase.co';
-  static const String _defaultAnonKey = 'sb_publishable_XnGlqB6Kw8DN4_SzmrRLIw_0J79FyiB';
+  static const String supabaseUrl = String.fromEnvironment(
+    'SUPABASE_URL',
+    defaultValue: 'https://fqpywbugsvjofozmkwvv.supabase.co',
+  );
+  
+  static const String supabaseAnonKey = String.fromEnvironment(
+    'SUPABASE_ANON_KEY',
+    defaultValue: 'sb_publishable_XnGlqB6Kw8DN4_SzmrRLIw_0J79FyiB',
+  );
 
   static Future<void> initialize() async {
-    final url = dotenv.env['SUPABASE_URL'] ?? _defaultUrl;
-    final anonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? _defaultAnonKey;
+    String url = supabaseUrl;
+    String anonKey = supabaseAnonKey;
+
+    try {
+      if (dotenv.isInitialized) {
+        if (dotenv.env['SUPABASE_URL'] != null && dotenv.env['SUPABASE_URL']!.isNotEmpty) {
+          url = dotenv.env['SUPABASE_URL']!;
+        }
+        if (dotenv.env['SUPABASE_ANON_KEY'] != null && dotenv.env['SUPABASE_ANON_KEY']!.isNotEmpty) {
+          anonKey = dotenv.env['SUPABASE_ANON_KEY']!;
+        }
+      }
+    } catch (_) {}
 
     try {
       await Supabase.initialize(
@@ -29,9 +47,9 @@ class SupabaseService {
     } catch (_) {
       try {
         Supabase.initialize(
-          url: _defaultUrl,
+          url: supabaseUrl,
           // ignore: deprecated_member_use
-          anonKey: _defaultAnonKey,
+          anonKey: supabaseAnonKey,
         );
         return Supabase.instance.client;
       } catch (_) {

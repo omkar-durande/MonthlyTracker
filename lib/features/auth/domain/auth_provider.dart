@@ -66,7 +66,7 @@ class AuthRepository {
   AuthRepository(this._client, this._onUserChanged);
 
   bool get _isPlaceholderEnv {
-    final url = dotenv.env['SUPABASE_URL'] ?? 'https://fqpywbugsvjofozmkwvv.supabase.co';
+    final url = SupabaseService.supabaseUrl;
     return url.contains('your-project.supabase.co');
   }
 
