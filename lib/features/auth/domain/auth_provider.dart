@@ -16,7 +16,7 @@ final demoUser = User(
 class AuthStateNotifier extends StateNotifier<User?> {
   AuthStateNotifier() : super(_initialUser()) {
     try {
-      _subscription = SupabaseService.authStateChanges.listen((state) {
+      _subscription = SupabaseService.authStateChanges?.listen((state) {
         if (state.session?.user != null) {
           this.state = state.session!.user;
         }
