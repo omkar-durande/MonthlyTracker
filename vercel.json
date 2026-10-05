@@ -1,11 +1,20 @@
 {
   "version": 2,
-  "cleanUrls": true,
-  "buildCommand": "echo 'Using pre-compiled web build'",
-  "outputDirectory": "build/web",
-  "rewrites": [
+  "cleanUrls": false,
+  "headers": [
     {
       "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!.*\\.).*)",
       "destination": "/index.html"
     }
   ]
