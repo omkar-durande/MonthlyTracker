@@ -17,8 +17,8 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailCtrl = TextEditingController(text: 'demo@monthlygoals.com');
-  final _passCtrl = TextEditingController(text: 'Password123!');
+  final _emailCtrl = TextEditingController();
+  final _passCtrl = TextEditingController();
   bool _obscure = true;
   bool _loading = false;
   String? _error;
@@ -55,9 +55,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   String _friendlyError(String e) {
-    if (e.contains('Invalid login')) return 'Incorrect email or password.';
-    if (e.contains('Email not confirmed')) return 'Please verify your email first.';
-    return 'Sign-in failed. Please try again.';
+    if (e.contains('Invalid login credentials')) return 'Incorrect email or password.';
+    if (e.contains('Email not confirmed')) return 'Please verify your email address in your inbox before signing in.';
+    final clean = e.replaceAll('AuthException(message: ', '').replaceAll('Exception: ', '').replaceAll(', statusCode: 400)', '').replaceAll(')', '').trim();
+    return clean.isNotEmpty ? clean : 'Sign-in failed. Please check your credentials.';
   }
 
   @override

@@ -54,9 +54,10 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   }
 
   String _friendlyError(String e) {
-    if (e.contains('already registered')) return 'This email is already in use.';
+    if (e.contains('already registered') || e.contains('already exists')) return 'This email address is already registered. Please sign in instead.';
     if (e.contains('Password should')) return 'Password must be at least 6 characters.';
-    return 'Sign-up failed. Please try again.';
+    final clean = e.replaceAll('AuthException(message: ', '').replaceAll('Exception: ', '').replaceAll(', statusCode: 400)', '').replaceAll(')', '').trim();
+    return clean.isNotEmpty ? clean : 'Sign-up failed. Please try again.';
   }
 
   @override
