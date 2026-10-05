@@ -23,7 +23,22 @@ class SupabaseService {
     }
   }
 
-  static SupabaseClient get client => Supabase.instance.client;
+  static SupabaseClient get client {
+    try {
+      return Supabase.instance.client;
+    } catch (_) {
+      try {
+        Supabase.initialize(
+          url: _defaultUrl,
+          // ignore: deprecated_member_use
+          anonKey: _defaultAnonKey,
+        );
+        return Supabase.instance.client;
+      } catch (_) {
+        return Supabase.instance.client;
+      }
+    }
+  }
 
   static User? get currentUser {
     try {
