@@ -66,8 +66,8 @@ class AuthRepository {
   AuthRepository(this._client, this._onUserChanged);
 
   bool get _isPlaceholderEnv {
-    final url = dotenv.env['SUPABASE_URL'] ?? '';
-    return url.contains('your-project.supabase.co') || url.isEmpty;
+    final url = dotenv.env['SUPABASE_URL'] ?? 'https://fqpywbugsvjofozmkwvv.supabase.co';
+    return url.contains('your-project.supabase.co');
   }
 
   Future<void> signUp({
@@ -89,37 +89,20 @@ class AuthRepository {
       return;
     }
 
-    try {
-      final res = await _client.auth.signUp(
-        email: cleanEmail,
-        password: password,
-        data: {'full_name': fullName},
-      );
-      if (res.user != null) {
+    final res = await _client.auth.signUp(
+      email: cleanEmail,
+      password: password,
+      data: {'full_name': fullName},
+    );
+
+    if (res.user != null) {
+      try {
         await _client.from('profiles').upsert({
           'id': res.user!.id,
           'full_name': fullName,
         });
-        _onUserChanged(res.user);
-      } else {
-        _onUserChanged(User(
-          id: 'demo-user-id-12345',
-          appMetadata: {},
-          userMetadata: {'full_name': fullName},
-          email: cleanEmail,
-          aud: 'authenticated',
-          createdAt: DateTime.now().toIso8601String(),
-        ));
-      }
-    } catch (e) {
-      _onUserChanged(User(
-        id: 'demo-user-id-12345',
-        appMetadata: {},
-        userMetadata: {'full_name': fullName},
-        email: cleanEmail,
-        aud: 'authenticated',
-        createdAt: DateTime.now().toIso8601String(),
-      ));
+      } catch (_) {}
+      _onUserChanged(res.user);
     }
   }
 
@@ -141,23 +124,12 @@ class AuthRepository {
       return;
     }
 
-    try {
-      final res = await _client.auth.signInWithPassword(
-        email: cleanEmail,
-        password: password,
-      );
-      if (res.user != null) {
-        _onUserChanged(res.user);
-      }
-    } catch (e) {
-      _onUserChanged(User(
-        id: 'demo-user-id-12345',
-        appMetadata: {},
-        userMetadata: {'full_name': 'Demo User'},
-        email: cleanEmail,
-        aud: 'authenticated',
-        createdAt: DateTime.now().toIso8601String(),
-      ));
+    final res = await _client.auth.signInWithPassword(
+      email: cleanEmail,
+      password: password,
+    );
+    if (res.user != null) {
+      _onUserChanged(res.user);
     }
   }
 
@@ -169,9 +141,7 @@ class AuthRepository {
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
-    try {
-      await _client.auth.resetPasswordForEmail(email);
-    } catch (_) {}
+    await _client.auth.resetPasswordForEmail(email);
   }
 }
 
