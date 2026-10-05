@@ -8,6 +8,7 @@ class SupabaseService {
   static Future<void> initialize() async {
     await Supabase.initialize(
       url: dotenv.env['SUPABASE_URL']!,
+      // ignore: deprecated_member_use
       anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
     );
   }

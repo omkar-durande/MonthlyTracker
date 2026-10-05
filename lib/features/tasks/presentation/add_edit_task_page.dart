@@ -295,7 +295,7 @@ class _AddEditTaskPageState extends ConsumerState<AddEditTaskPage> {
                     ? _linkedGoalId
                     : null;
                 return DropdownButtonFormField<String?>(
-                  value: validValue,
+                  initialValue: validValue,
                   isExpanded: true,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.flag_outlined),
