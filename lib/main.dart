@@ -9,13 +9,19 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load environment variables
-  await dotenv.load(fileName: '.env');
+  try {
+    await dotenv.load(fileName: '.env');
+  } catch (_) {}
 
   // Initialize Supabase
-  await SupabaseService.initialize();
+  try {
+    await SupabaseService.initialize();
+  } catch (_) {}
 
   // Initialize local notifications
-  await NotificationService.initialize();
+  try {
+    await NotificationService.initialize();
+  } catch (_) {}
 
   runApp(
     const ProviderScope(
