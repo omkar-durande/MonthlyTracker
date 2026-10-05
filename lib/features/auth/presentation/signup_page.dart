@@ -45,7 +45,14 @@ class _SignupPageState extends ConsumerState<SignupPage> {
         password: _passCtrl.text,
         fullName: _nameCtrl.text.trim(),
       );
-      setState(() => _success = true);
+      if (mounted) {
+        final user = ref.read(currentUserProvider);
+        if (user != null) {
+          context.go(AppRoutes.home);
+        } else {
+          setState(() => _success = true);
+        }
+      }
     } catch (e) {
       setState(() => _error = _friendlyError(e.toString()));
     } finally {
