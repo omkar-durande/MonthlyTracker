@@ -1,0 +1,8 @@
+{
+  "name": "monthly-goals-web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Using pre-compiled web build'"
+  }
+}

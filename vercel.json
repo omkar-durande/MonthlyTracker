@@ -1,6 +1,7 @@
 {
   "version": 2,
   "cleanUrls": true,
+  "buildCommand": "echo 'Using pre-compiled web build'",
   "outputDirectory": "build/web",
   "rewrites": [
     {
